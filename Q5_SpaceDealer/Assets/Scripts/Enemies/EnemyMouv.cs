@@ -3,20 +3,24 @@ using UnityEngine;
 public class EnemyMouv : MonoBehaviour
 {
     [Header("params")]
-    [SerializeField] private float m_speed;
+    [SerializeField][Range(0f, 10f)] private float m_speed;
 
     [Header("Behavior Coeff")]
     [SerializeField][Range(0f, 1f)] private float m_avoidCoeff;
+    [SerializeField][Range(0f, 0.5f)] private float m_alignementCoeff;
     [SerializeField][Range(0f, 1f)] private float m_cohesionCoeff;
 
     [Header("Behavior Range")]
-    [SerializeField] private float m_avoidingRange;
-    [SerializeField] private float m_cohesionRange;
+    [SerializeField][Range(0f, 10f)] private float m_avoidingRange;
+    [SerializeField][Range(0f, 10f)] private float m_alignementRange;
+    [SerializeField][Range(0f, 10f)] private float m_cohesionRange;
     [SerializeField] private LayerMask m_avoidingLayers;
     [SerializeField] private LayerMask m_cohesionLayers;
 
     //own components
     private Rigidbody2D m_rb;
+
+    /*-------------------------------------------------------------------*/
 
     private void Start()
     {
@@ -26,7 +30,10 @@ public class EnemyMouv : MonoBehaviour
     private void FixedUpdate()
     {
         m_rb.velocity += Avoiding();
-
+        m_rb.velocity += Alignment();
+        m_rb.velocity += Cohesion();
+        m_rb.velocity = m_rb.velocity.normalized * m_speed;
+        LookForward();
         //MoveFoward();
 
         //debug areas
@@ -34,11 +41,12 @@ public class EnemyMouv : MonoBehaviour
         Debug.DrawRay(transform.position, Vector2.down * m_cohesionRange, Color.cyan);
     }
 
-    private void MoveFoward()
+    /*-------------------------------------------------------------------*/
+
+    private void LookForward()
     {
-        float rot = Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90f);
-        Vector2 vec = new Vector2(Mathf.Cos(rot), Mathf.Sin(rot));
-        m_rb.velocity = vec * m_speed;
+        float angle = Vector2.SignedAngle(Vector2.up, m_rb.velocity.normalized);
+        transform.rotation = Quaternion.Euler(0, 0 , angle);
     }
 
     private Vector2 Avoiding()
@@ -49,15 +57,19 @@ public class EnemyMouv : MonoBehaviour
         //find all object to avoid
         foreach (Collider2D coll in Physics2D.OverlapCircleAll(transform.position, m_avoidingRange, m_avoidingLayers))
         {
-            if (coll.gameObject != gameObject)
-            {
-                //specific avoid velocity
-                float dist = Vector2.Distance((Vector2)transform.position, coll.ClosestPoint(transform.position));
+            //specific avoid velocity   
+            float dist = Vector2.Distance((Vector2)transform.position, coll.ClosestPoint(transform.position));
+            if (dist > 0)
+            {           
                 Vector2 dir = (Vector2)transform.position - coll.ClosestPoint(transform.position);
                 dir = dir.normalized;
 
-                avoidVelocity += dir / dist; //closer is harder
+                avoidVelocity += dir / dist; //closer is faster
                 nbCloseObj++;
+            }
+            else
+            {
+                avoidVelocity += new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
             }
         }
 
@@ -71,15 +83,14 @@ public class EnemyMouv : MonoBehaviour
         return avoidVelocity;
     }
 
-    private float CohesionAngle()
+    private Vector2 Cohesion()
     {
-        return transform.rotation.eulerAngles.z;
-
         int nbCloseObj = 0;
         Vector2 averagePoints = Vector2.zero;
+        Vector2 cohesionVeloc = Vector2.zero;
 
-        //find all object to avoid
-        foreach (Collider2D coll in Physics2D.OverlapCircleAll(transform.position, m_avoidingRange, m_avoidingLayers))
+        //find all object to cohesion
+        foreach (Collider2D coll in Physics2D.OverlapCircleAll(transform.position, m_cohesionRange, m_cohesionLayers))
         {
             if (coll.gameObject != gameObject)
             {
@@ -93,12 +104,36 @@ public class EnemyMouv : MonoBehaviour
         {
             averagePoints /= nbCloseObj;
 
-            float o = averagePoints.x - transform.position.x;
-            float a = averagePoints.y - transform.position.y;
-            float angle = 180 - Mathf.Atan2(o, a) * Mathf.Rad2Deg;
-            return angle;
+            cohesionVeloc = averagePoints - (Vector2)transform.position;
+            cohesionVeloc.Normalize();
+            cohesionVeloc *= m_cohesionCoeff;          
         }
 
-        return transform.rotation.eulerAngles.z;
+        return cohesionVeloc;
+    }
+
+    private Vector2 Alignment()
+    {
+        int nbCloseObj = 0;
+        Vector2 averageVeloc = Vector2.zero;
+
+        //find all object to alignement
+        foreach (Collider2D coll in Physics2D.OverlapCircleAll(transform.position, m_alignementRange, m_cohesionLayers))
+        {
+            if (coll.gameObject != gameObject)
+            {
+                averageVeloc += coll.gameObject.GetComponent<Rigidbody2D>().velocity;
+                nbCloseObj++;
+            }
+        }
+
+        //set the necessary direction to avoid
+        if (nbCloseObj > 0)
+        {
+            averageVeloc /= nbCloseObj;
+            averageVeloc *= m_alignementCoeff;
+        }
+
+        return averageVeloc;
     }
 }
