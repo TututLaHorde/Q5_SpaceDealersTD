@@ -1,11 +1,12 @@
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyMove))]
+[RequireComponent (typeof(EnemyMove), typeof(Rigidbody2D), typeof(Collider2D))]
 
 public class EnemyController : MonoBehaviour
 {
     public Rigidbody2D m_rb { get; private set; }
     public Transform m_trs { get; private set; }
+    public Collider2D m_coll {  get; private set; }
 
     private EnemyMove m_scMove;
 
@@ -14,6 +15,7 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         m_rb = GetComponent<Rigidbody2D>();
+        m_coll = GetComponent<Collider2D>();
         m_scMove = GetComponent<EnemyMove>();
         m_trs = transform;
     }

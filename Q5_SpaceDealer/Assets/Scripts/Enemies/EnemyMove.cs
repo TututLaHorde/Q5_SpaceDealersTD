@@ -4,6 +4,7 @@ public class EnemyMove : MonoBehaviour
 {
     [Header("params")]
     [SerializeField][Range(0f, 10f)] private float m_speed;
+    [SerializeField][Range(0f, 1f)] private float m_reactivityCoef;
 
     [Header("Behavior Coeff")]
     [SerializeField][Range(0f, 1f)] private float m_avoidCoeff;
@@ -31,16 +32,12 @@ public class EnemyMove : MonoBehaviour
 
     public void Move()
     {
-        m_rb.velocity += Avoiding();
-        m_rb.velocity += Alignment();
-        m_rb.velocity += Cohesion();
-        m_rb.velocity = m_rb.velocity.normalized * m_speed;
-        LookForward();
-        //MoveFoward();
+        //m_rb.velocity += BoidBehavior().normalized * m_speed * m_reactivityCoef;
+        //m_rb.velocity = m_rb.velocity.normalized * m_speed * Random.Range(0.8f, 1.3f);
 
-        //debug areas
-        Debug.DrawRay(m_trs.position, Vector2.up * m_avoidingRange, Color.red);
-        Debug.DrawRay(m_trs.position, Vector2.down * m_cohesionRange, Color.cyan);
+        m_rb.velocity += BoidBehavior();
+        m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
+        LookForward();
     }
 
     /*-------------------------------------------------------------------*/
@@ -51,31 +48,119 @@ public class EnemyMove : MonoBehaviour
         m_trs.rotation = Quaternion.Euler(0, 0 , angle);
     }
 
-    private Vector2 Avoiding()
+    private Vector2 BoidBehavior()
     {
         int nbCloseObj = 0;
+        int nbAlignObj = 0;
+        int nbCohesObj = 0;
         Vector2 avoidVelocity = Vector2.zero;
+        Vector2 alignVelocity = Vector2.zero;
+        Vector2 cohesionPoint = Vector2.zero;
+        Vector2 finalVelocity = Vector2.zero;
 
-        //find all object to avoid
-        foreach (Collider2D coll in Physics2D.OverlapCircleAll(m_trs.position, m_avoidingRange, m_avoidingLayers))
+        //check other aliens
+        foreach (EnemyController enemy in EnemyManager.instance.m_enemies)
         {
-            //specific avoid velocity   
-            float dist = Vector2.Distance((Vector2)m_trs.position, coll.ClosestPoint(m_trs.position));
-            if (dist > 0)
-            {           
-                Vector2 dir = (Vector2)m_trs.position - coll.ClosestPoint(m_trs.position);
-                dir = dir.normalized;
-
-                avoidVelocity += dir / dist; //closer is faster
-                nbCloseObj++;
-            }
-            else
+            if (enemy.gameObject != gameObject)
             {
-                avoidVelocity += new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+                Vector2 closestPoint = enemy.m_trs.position;
+                float dist = Vector2.Distance((Vector2)m_trs.position, closestPoint);
+
+                avoidVelocity += OneAvoid(dist, closestPoint, ref nbCloseObj);
+                alignVelocity += OneAlign(dist, enemy, ref nbAlignObj);
+                cohesionPoint += OneCohes(dist, enemy, ref nbCohesObj);
             }
         }
 
-        //global avoid velocity
+        //check asteroids
+        int aliens = nbCloseObj;
+        foreach (ObstacleController obstacle in ObstaclesManager.instance.m_obstacles)
+        {
+            Vector2 closestPoint = obstacle.m_coll.ClosestPoint(m_trs.position);
+            float dist = Vector2.Distance((Vector2)m_trs.position, closestPoint);
+
+            avoidVelocity += OneAvoid(dist, closestPoint, ref nbCloseObj, aliens);
+        }
+
+        //calculate the velocity
+        finalVelocity += Avoiding(nbCloseObj, avoidVelocity);
+        finalVelocity += Alignment(nbAlignObj, alignVelocity);
+        finalVelocity += Cohesion(nbCohesObj, cohesionPoint);
+
+        return finalVelocity;
+    }
+
+    private Vector2 OneAvoidWall(float dist, Vector2 closestPoint, ref int nbCloseObj)
+    {
+        if (dist < m_avoidingRange)
+        {
+            nbCloseObj++;
+
+            //avoid harder if it's closer
+            if (dist > 0)
+            {
+                Vector2 dir = (Vector2)m_trs.position - closestPoint;
+                dir = dir.normalized / dist;
+
+                return dir.normalized;
+            }
+            else
+            {
+                return new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            }
+        }
+
+        return Vector2.zero;
+    }
+
+    private Vector2 OneAvoid(float dist, Vector2 closestPoint, ref int nbCloseObj, int nbEnemies = 1)
+    {
+        if (dist < m_avoidingRange)
+        {
+            nbCloseObj++;
+
+            //avoid harder if it's closer
+            if (dist > 0)
+            {
+                float ratio = Mathf.Clamp01(dist / m_avoidingRange);
+                Vector2 dir = -ratio * (closestPoint - (Vector2)m_trs.position);
+
+                return dir.normalized * (nbEnemies != 0 ? nbEnemies : 1);
+            }
+            //for supersosition
+            else
+            {
+                return new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            }
+        }
+
+        return Vector2.zero;
+    }
+
+    private Vector2 OneAlign(float dist, EnemyController enemy, ref int nbAlignObj)
+    {
+        if (dist < m_alignementRange)
+        {
+            nbAlignObj++;
+            return enemy.m_rb.velocity.normalized;
+        }
+
+        return Vector2.zero;
+    }
+
+    private Vector2 OneCohes(float dist, EnemyController enemy, ref int nbCohesObj)
+    {
+        if (dist < m_cohesionRange)
+        {
+            nbCohesObj++;
+            return enemy.m_trs.position;
+        }
+
+        return Vector2.zero;
+    }
+
+    private Vector2 Avoiding(int nbCloseObj, Vector2 avoidVelocity)
+    {
         if (nbCloseObj > 0)
         {
             avoidVelocity /= nbCloseObj;
@@ -85,57 +170,32 @@ public class EnemyMove : MonoBehaviour
         return avoidVelocity;
     }
 
-    private Vector2 Cohesion()
+    private Vector2 Alignment(int nbAlignObj, Vector2 alignVelocity)
     {
-        int nbCloseObj = 0;
-        Vector2 averagePoints = Vector2.zero;
-        Vector2 cohesionVeloc = Vector2.zero;
-
-        //find all object to cohesion
-        foreach (Collider2D coll in Physics2D.OverlapCircleAll(m_trs.position, m_cohesionRange, m_cohesionLayers))
+        //set the necessary direction to avoid
+        if (nbAlignObj > 0)
         {
-            if (coll.gameObject != gameObject)
-            {
-                averagePoints += coll.ClosestPoint(m_trs.position);
-                nbCloseObj++;
-            }
+            alignVelocity /= nbAlignObj;
+            alignVelocity *= m_alignementCoeff;
         }
 
-        //set the necessary direction to avoid
-        if (nbCloseObj > 0)
-        {
-            averagePoints /= nbCloseObj;
+        return alignVelocity;
+    }
 
-            cohesionVeloc = averagePoints - (Vector2)m_trs.position;
+    private Vector2 Cohesion(int nbCohesObj, Vector2 cohesionPoint)
+    {
+        Vector2 cohesionVeloc = Vector2.zero;
+
+        //set the necessary direction to avoid
+        if (nbCohesObj > 0)
+        {
+            cohesionPoint /= nbCohesObj;
+
+            cohesionVeloc = cohesionPoint - (Vector2)m_trs.position;
             cohesionVeloc.Normalize();
             cohesionVeloc *= m_cohesionCoeff;          
         }
 
         return cohesionVeloc;
-    }
-
-    private Vector2 Alignment()
-    {
-        int nbCloseObj = 0;
-        Vector2 averageVeloc = Vector2.zero;
-
-        //find all object to alignement
-        foreach (Collider2D coll in Physics2D.OverlapCircleAll(m_trs.position, m_alignementRange, m_cohesionLayers))
-        {
-            if (coll.gameObject != gameObject)
-            {
-                averageVeloc += coll.gameObject.GetComponent<Rigidbody2D>().velocity;
-                nbCloseObj++;
-            }
-        }
-
-        //set the necessary direction to avoid
-        if (nbCloseObj > 0)
-        {
-            averageVeloc /= nbCloseObj;
-            averageVeloc *= m_alignementCoeff;
-        }
-
-        return averageVeloc;
     }
 }
