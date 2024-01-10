@@ -9,5 +9,11 @@ public class ObstacleController : MonoBehaviour
     private void Start()
     {
         m_coll = GetComponent<Collider2D>();
+        Init();
+    }
+
+    public virtual void Init()
+    {
+
     }
 }
