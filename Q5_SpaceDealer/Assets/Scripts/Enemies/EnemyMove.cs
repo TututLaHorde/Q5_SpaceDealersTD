@@ -3,8 +3,7 @@ using UnityEngine;
 public class EnemyMove : MonoBehaviour
 {
     [Header("params")]
-    [SerializeField][Range(0f, 10f)] private float m_speed;
-    [SerializeField][Range(0f, 1f)] private float m_reactivityCoef;
+    [SerializeField][Range(2f, 10f)] private float m_speed;
 
     [Header("Behavior Coeff")]
     [SerializeField][Range(0f, 1f)] private float m_avoidCoeff;
@@ -32,9 +31,6 @@ public class EnemyMove : MonoBehaviour
 
     public void Move()
     {
-        //m_rb.velocity += BoidBehavior().normalized * m_speed * m_reactivityCoef;
-        //m_rb.velocity = m_rb.velocity.normalized * m_speed * Random.Range(0.8f, 1.3f);
-
         m_rb.velocity += BoidBehavior();
         m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
         LookForward();
