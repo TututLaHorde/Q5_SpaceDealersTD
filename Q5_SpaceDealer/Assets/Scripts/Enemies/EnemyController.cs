@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
 
     /*-------------------------------------------------------------------*/
 
-    private void Start()
+    private void OnEnable()
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_coll = GetComponent<Collider2D>();
