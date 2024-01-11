@@ -6,10 +6,9 @@ public class ObstacleController : MonoBehaviour
 {
     public Collider2D m_coll { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         m_coll = GetComponent<Collider2D>();
-        Init();
     }
 
     public virtual void Init()
