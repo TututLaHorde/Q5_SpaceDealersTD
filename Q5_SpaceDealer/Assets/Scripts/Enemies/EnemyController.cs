@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(EnemyMove), typeof(Rigidbody2D), typeof(Collider2D))]
+[RequireComponent (typeof(EnemyLife))]
 
 public class EnemyController : MonoBehaviour
 {
@@ -23,5 +24,10 @@ public class EnemyController : MonoBehaviour
     public void CallMovements()
     {
         m_scMove.Move();
+    }
+
+    public void Die()
+    {
+        EnemyManager.instance.AnEnemyDie(this);
     }
 }

@@ -14,8 +14,6 @@ public class EnemyMove : MonoBehaviour
     [SerializeField][Range(0f, 10f)] private float m_avoidingRange;
     [SerializeField][Range(0f, 10f)] private float m_alignementRange;
     [SerializeField][Range(0f, 10f)] private float m_cohesionRange;
-    [SerializeField] private LayerMask m_avoidingLayers;
-    [SerializeField] private LayerMask m_cohesionLayers;
 
     //own components
     private Rigidbody2D m_rb;
