@@ -55,7 +55,7 @@ public class ScMovement : MonoBehaviour
             zAngle = 360 - zAngle;
         }
 
-        Debug.Log(zAngle);
+        
         transform.rotation = Quaternion.Euler(0,0,zAngle - 90);
     }
 }
