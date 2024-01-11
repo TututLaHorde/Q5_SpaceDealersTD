@@ -23,7 +23,7 @@ public class EnemyMove : MonoBehaviour
 
     /*-------------------------------------------------------------------*/
 
-    private void Start()
+    private void OnEnable()
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_trs = transform;
