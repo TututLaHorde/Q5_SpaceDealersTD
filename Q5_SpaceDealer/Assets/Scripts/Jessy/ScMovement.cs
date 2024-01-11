@@ -30,12 +30,17 @@ public class ScMovement : MonoBehaviour
             rb.AddForce(direction * speed);
             LimitSpeed();
             TurnAround();
+            rb.freezeRotation = true;
         }
     }
 
     public void MoveAround(Vector2 movementVector)
     {
         direction = movementVector;
+
+        if (direction == Vector2.zero)
+            rb.freezeRotation = false;
+
     }
 
     private void LimitSpeed()
@@ -55,7 +60,6 @@ public class ScMovement : MonoBehaviour
             zAngle = 360 - zAngle;
         }
 
-        
         transform.rotation = Quaternion.Euler(0,0,zAngle - 90);
     }
 }

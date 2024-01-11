@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,8 +8,8 @@ using UnityEngine.UIElements;
 
 public class ScDragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField] GameObject inGameObject;
-    [SerializeField] Sprite inGameSprite;
+    [SerializeField] turretInfo myInfo;
+    [SerializeField] TextMeshProUGUI price;
     private Sprite mySprite;
     private Transform originalParent;
     private UnityEngine.UI.Image myImage;
@@ -18,11 +19,12 @@ public class ScDragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
         myImage = GetComponent<UnityEngine.UI.Image>();
         mySprite = myImage.sprite;
         originalParent = transform.parent;
+        price.text = myInfo.price.ToString() + "$";
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        ScBuildPreview.Instance.DragStart(inGameSprite);
+        ScBuildPreview.Instance.DragStart(myInfo);
 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
@@ -43,7 +45,7 @@ public class ScDragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        ScBuildPreview.Instance.DragEnds(inGameObject);
+        ScBuildPreview.Instance.DragEnds();
         transform.SetParent(originalParent);
         transform.SetAsFirstSibling();
         transform.position = originalParent.position;
