@@ -39,8 +39,12 @@ public class ScMovement : MonoBehaviour
         direction = movementVector;
 
         if (direction == Vector2.zero)
+        {
             rb.freezeRotation = false;
-
+            rb.drag = 0.5f;
+        }
+        else
+            rb.drag = 0f;
     }
 
     private void LimitSpeed()
