@@ -19,6 +19,8 @@ public class EnemyMove : MonoBehaviour
     private Rigidbody2D m_rb;
     private Transform m_trs;
 
+    private bool m_isTargeting;
+
     /*-------------------------------------------------------------------*/
 
     private void OnEnable()
@@ -29,9 +31,23 @@ public class EnemyMove : MonoBehaviour
 
     public void Move()
     {
-        m_rb.velocity += BoidBehavior();
-        m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
-        LookForward();
+        //move on boids
+        if (!m_isTargeting)
+        {
+            m_rb.velocity += BoidBehavior();
+            m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
+            LookForward();
+        }
+        //target and atk
+        else
+        {
+            m_rb.velocity = Vector2.zero;
+
+            //TODO Look to target
+            //TODO atk target
+            //TODO stop targeting if too far
+        }
+
     }
 
     /*-------------------------------------------------------------------*/
@@ -66,10 +82,18 @@ public class EnemyMove : MonoBehaviour
             }
         }
 
-        //check asteroids
+        //check obstacles
         int aliens = nbCloseObj;
         foreach (ObstacleController obstacle in ObstaclesManager.instance.m_obstacles)
         {
+            //find a traget to atk
+            if (obstacle.tag == "Structures")
+            {
+                m_isTargeting = true;
+                //TODO smooth slowdown
+                return Vector2.zero;
+            }
+
             Vector2 closestPoint = obstacle.m_coll.ClosestPoint(m_trs.position);
             float dist = Vector2.Distance((Vector2)m_trs.position, closestPoint);
 
@@ -82,29 +106,6 @@ public class EnemyMove : MonoBehaviour
         finalVelocity += Cohesion(nbCohesObj, cohesionPoint);
 
         return finalVelocity;
-    }
-
-    private Vector2 OneAvoidWall(float dist, Vector2 closestPoint, ref int nbCloseObj)
-    {
-        if (dist < m_avoidingRange)
-        {
-            nbCloseObj++;
-
-            //avoid harder if it's closer
-            if (dist > 0)
-            {
-                Vector2 dir = (Vector2)m_trs.position - closestPoint;
-                dir = dir.normalized / dist;
-
-                return dir.normalized;
-            }
-            else
-            {
-                return new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
-            }
-        }
-
-        return Vector2.zero;
     }
 
     private Vector2 OneAvoid(float dist, Vector2 closestPoint, ref int nbCloseObj, int nbEnemies = 1)

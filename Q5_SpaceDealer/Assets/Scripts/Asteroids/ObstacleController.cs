@@ -10,9 +10,4 @@ public class ObstacleController : MonoBehaviour
     {
         m_coll = GetComponent<Collider2D>();
     }
-
-    public virtual void Init()
-    {
-
-    }
 }

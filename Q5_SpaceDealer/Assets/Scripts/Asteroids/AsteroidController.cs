@@ -41,7 +41,7 @@ public class AsteroidController : ObstacleController
 
     /*-------------------------------------------------------------------*/
 
-    public override void Init()
+    public void Init()
     {
         //max is max
         if (m_minScale > m_maxScale)
