@@ -1800,7 +1800,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: XX$
+  m_text: 1000$
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2544,7 +2544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1498766283}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 2
   m_Elasticity: 0.1
@@ -2851,6 +2851,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7139913437310470082, guid: 3e93b1b24bd081c48905d21becb26043, type: 3}
+      propertyPath: m_colletRange
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e93b1b24bd081c48905d21becb26043, type: 3}
 --- !u!4 &1004113257 stripped
@@ -2972,8 +2976,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -50, y: 25}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: -70, y: 25}
+  m_SizeDelta: {x: 140, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1248825907
 MonoBehaviour:
@@ -2988,7 +2992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6792453, g: 0.6758363, b: 0.61772877, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3351,11 +3355,11 @@ MonoBehaviour:
   m_spawnArea: {fileID: 464652061}
   m_alienPrefab: {fileID: 8422918634240966942, guid: fe8fdc2068fa4ba47be9ddd0dbabd460, type: 3}
   m_nbMaxEnemies: 100
-  m_nbInitalEnemies: 99
-  m_timeBetweenWaves: 1
-  m_maxWaveIndex: 1
+  m_nbInitalEnemies: 30
+  m_timeBetweenWaves: 5
+  m_maxWaveIndex: 10
   m_nbEnemiesMinWave: 0
-  m_nbEnemiesMaxWave: 0
+  m_nbEnemiesMaxWave: 26
   m_enemies: []
 --- !u!4 &1486382864
 Transform:
@@ -4074,8 +4078,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -50, y: 25}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: -70, y: 25}
+  m_SizeDelta: {x: 140, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1845244923
 MonoBehaviour:
@@ -4090,7 +4094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6792453, g: 0.6758363, b: 0.61772877, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4149,6 +4153,9 @@ MonoBehaviour:
   m_maxMoney: 1000000
   m_methyltext: {fileID: 1790449506}
   m_moneytext: {fileID: 1795093222}
+  playerPos: {fileID: 1004113257}
+  minDistanceToConvert: 2
+  heisenbergTrans: {fileID: 1407972472}
 --- !u!114 &1919032938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4171,7 +4178,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919032936}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
