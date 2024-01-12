@@ -26,6 +26,7 @@ public class DropMovement : MonoBehaviour
         direction.x = Random.Range(-1f, 1f);
         direction.y = Random.Range(-1f, 1f);
         m_trs = transform;
+        m_targetTrs = null;
     }
 
     /*-------------------------------------------------------------------*/
@@ -68,9 +69,10 @@ public class DropMovement : MonoBehaviour
         m_trs.position += m_maxSpeed * (direction.normalized + direction) * Time.deltaTime;
 
         //recup
-        if ((m_trs.position - m_targetTrs.position).magnitude <= m_recupDist)
+        if (Vector3.Distance(m_trs.position, m_targetTrs.position) <= m_recupDist)
         {
             ScResourcesManager.instance.GainMethyl(m_methylAmount);
+            DropManager.instance.RemoveDrop(this);
         }
     }
 }

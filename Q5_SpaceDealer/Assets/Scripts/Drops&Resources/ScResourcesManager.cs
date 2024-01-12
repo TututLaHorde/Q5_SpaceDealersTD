@@ -1,13 +1,20 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ScResourcesManager : MonoBehaviour
 {
     public static ScResourcesManager instance;
 
+    [Header("resources")]
     [SerializeField][Min(0f)] private int m_maxMethyl;
     [SerializeField][Min(0f)] private int m_maxMoney;
     private int m_methyl;
     private int m_money;
+
+    [Header("texts")]
+    [SerializeField] private TMP_Text m_methyltext;
+    [SerializeField] private TMP_Text m_moneytext;
 
     /*-------------------------------------------------------------------*/
 
@@ -24,6 +31,15 @@ public class ScResourcesManager : MonoBehaviour
             Destroy(this);
             return;
         }
+
+        Assert.IsNotNull(m_methyltext);
+        Assert.IsNotNull(m_moneytext);
+    }
+
+    private void Start()
+    {
+        UpdtTextMethyl();
+        UpdtTextMoney();
     }
 
     /*-------------------------------------------------------------------*/
@@ -38,6 +54,7 @@ public class ScResourcesManager : MonoBehaviour
         if (m_money - Mathf.Abs(amount) >= 0)
         {
             m_money -= Mathf.Abs(amount);
+            UpdtTextMoney();
             return true;
         }
         else
@@ -49,6 +66,7 @@ public class ScResourcesManager : MonoBehaviour
     public void GainMoney(int amount)
     {
         m_money += Mathf.Clamp(Mathf.Abs(amount), 0, m_maxMoney);
+        UpdtTextMoney();
     }
 
     public int GetMethyl()
@@ -61,6 +79,7 @@ public class ScResourcesManager : MonoBehaviour
         if (m_methyl - Mathf.Abs(amount) >= 0)
         {
             m_methyl -= Mathf.Abs(amount);
+            UpdtTextMethyl();
             return true;
         }
         else
@@ -72,5 +91,18 @@ public class ScResourcesManager : MonoBehaviour
     public void GainMethyl(int amount)
     {
         m_methyl += Mathf.Clamp(Mathf.Abs(amount), 0, m_maxMoney);
+        UpdtTextMethyl();
+    }
+
+    /*-------------------------------------------------------------------*/
+
+    private void UpdtTextMoney()
+    {
+        m_moneytext.text = m_money + " M $";
+    }
+
+    private void UpdtTextMethyl()
+    {
+        m_methyltext.text = m_methyl.ToString();
     }
 }
