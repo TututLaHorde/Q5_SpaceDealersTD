@@ -575,7 +575,7 @@ Transform:
   m_Children:
   - {fileID: 218170924}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &284430499
 SpriteRenderer:
@@ -2797,28 +2797,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375287507}
   m_CullTransparentMesh: 1
---- !u!1 &1407972468 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6765966207201523219, guid: 3675806d245776f43b1e2ffb07465bd8, type: 3}
-  m_PrefabInstance: {fileID: 3707506}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1407972472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6765966207201523217, guid: 3675806d245776f43b1e2ffb07465bd8, type: 3}
   m_PrefabInstance: {fileID: 3707506}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1407972473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1407972468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e708484edda4d9b4b9ff912b5af3758b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1486382862
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,7 +2834,7 @@ MonoBehaviour:
   m_spawnArea: {fileID: 464652061}
   m_alienPrefab: {fileID: 8422918634240966942, guid: fe8fdc2068fa4ba47be9ddd0dbabd460, type: 3}
   m_nbMaxEnemies: 100
-  m_nbInitalEnemies: 18
+  m_nbInitalEnemies: 99
   m_timeBetweenWaves: 1
   m_maxWaveIndex: 1
   m_nbEnemiesMinWave: 0
@@ -2871,7 +2854,7 @@ Transform:
   m_Children:
   - {fileID: 464652061}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498766282
 GameObject:
@@ -3047,7 +3030,7 @@ Transform:
   - {fileID: 1781762540}
   - {fileID: 1407972472}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1683797983
 PrefabInstance:
@@ -3971,3 +3954,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6664440806119375900, guid: d4964210b9505fd44a3db23fd2599d90, type: 3}
   m_PrefabInstance: {fileID: 2013007125}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2103097701
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2103097703}
+  - component: {fileID: 2103097702}
+  m_Layer: 0
+  m_Name: DropManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2103097702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103097701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ee4e69555a3ed46bbd6d2dd2cd05a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_dropPrefab: {fileID: 8366073942135337130, guid: 1c1af211d65efc64c82bafa16550367b, type: 3}
+  m_startingNumb: 10
+  m_drops: []
+--- !u!4 &2103097703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103097701}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

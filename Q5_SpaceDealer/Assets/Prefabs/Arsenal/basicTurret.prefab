@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9168093886399223972}
   - component: {fileID: 4217424816977413374}
+  - component: {fileID: 7636698984130950793}
   m_Layer: 8
   m_Name: collider
   m_TagString: Untagged
@@ -48,6 +49,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.38
+--- !u!114 &7636698984130950793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504281638977551398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e708484edda4d9b4b9ff912b5af3758b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4818071046507649270
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 5
   bulletSpeed: 20
-  dammagePerHit: 0
+  dammagePerHit: 10
   health: 0
   shotPerSeconde: 10
   myTrans: {fileID: 6079425020831042271}

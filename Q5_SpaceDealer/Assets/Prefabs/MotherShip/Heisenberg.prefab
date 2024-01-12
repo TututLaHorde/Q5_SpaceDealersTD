@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 6765966207201523218}
   - component: {fileID: 1100799348943492880}
   - component: {fileID: 5335513327604214672}
+  - component: {fileID: 9124068817748677232}
   m_Layer: 8
   m_Name: Heisenberg
   m_TagString: Untagged
@@ -247,3 +248,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highligtArea: {fileID: 5218666947126852800}
+--- !u!114 &9124068817748677232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6765966207201523219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e708484edda4d9b4b9ff912b5af3758b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

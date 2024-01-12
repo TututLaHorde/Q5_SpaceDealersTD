@@ -10,6 +10,6 @@ public class ScBasic : ScTurret
     {
         fireDirection.Set(firePoint[0].position.x - myTrans.position.x, firePoint[0].position.y - myTrans.position.y);
         lastBullet = ScArsenal.instance.GiveBasicBullet();
-        lastBullet.Fire(fireDirection, bulletSpeed, firePoint[0].position);
+        lastBullet.Fire(fireDirection, bulletSpeed, firePoint[0].position,dammagePerHit);
     }
 }

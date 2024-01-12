@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class ScBuildPreview : MonoBehaviour
 {
@@ -84,7 +79,9 @@ public class ScBuildPreview : MonoBehaviour
             if (result.transform.gameObject.layer == 7)
             {
                 Vector3 spawnPoint = new Vector3(mainCamera.ScreenToWorldPoint(mousePosOnScreen).x, mainCamera.ScreenToWorldPoint(mousePosOnScreen).y, 0);
-                GameObject.Instantiate(newTurretInfos.go, spawnPoint, Quaternion.identity);
+                GameObject tempo =  GameObject.Instantiate(newTurretInfos.go, spawnPoint, Quaternion.identity);
+                
+                ObstaclesManager.instance.m_obstacles.Add(tempo.GetComponentInChildren<ObstacleController>());
             }
         }
 

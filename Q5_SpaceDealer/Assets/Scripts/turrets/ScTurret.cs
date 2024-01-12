@@ -6,7 +6,7 @@ public class ScTurret : MonoBehaviour
 {
     [SerializeField] float range;
     [SerializeField] protected float bulletSpeed;
-    [SerializeField] int dammagePerHit;
+    [SerializeField] protected int dammagePerHit;
     [SerializeField] int health;
     [SerializeField] float shotPerSeconde; // number of shoots per seconde
     [SerializeField] protected Transform myTrans;
