@@ -8,6 +8,13 @@ public class EnemyLife : MonoBehaviour
 
     /*-------------------------------------------------------------------*/
 
+    private void OnEnable()
+    {
+        m_currentLife = m_maxlife;
+    }
+
+    /*-------------------------------------------------------------------*/
+
     public void TakeDamage(int damage)
     {
         //take dmg
