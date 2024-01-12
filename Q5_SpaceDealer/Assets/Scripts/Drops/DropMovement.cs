@@ -38,5 +38,18 @@ public class DropMovement : MonoBehaviour
         {
             m_trs.position += m_minSpeed * direction * Time.deltaTime;
         }
+
+        //if it's too far of the center
+        DestroyArea();
+    }
+
+    /*-------------------------------------------------------------------*/
+
+    private void DestroyArea()
+    {
+        if (m_trs.position.magnitude >= m_destructionDist) 
+        {
+            DropManager.instance.RemoveDrop(this);
+        }
     }
 }
