@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyLife : MonoBehaviour
 {
     [Header("HP")]
-    [SerializeField] private int m_maxlife;
+    [SerializeField] private int m_maxlife = 1;
     private int m_currentLife;
 
     /*-------------------------------------------------------------------*/
