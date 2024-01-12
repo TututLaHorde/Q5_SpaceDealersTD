@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8422918634240966937}
   - component: {fileID: 8422918634240966936}
   - component: {fileID: 8422918634240966939}
+  - component: {fileID: 7699246306433736859}
   - component: {fileID: 8422918634240966916}
   m_Layer: 3
   m_Name: Skyler
@@ -162,6 +163,21 @@ MonoBehaviour:
   m_cohesionLayers:
     serializedVersion: 2
     m_Bits: 8
+--- !u!114 &7699246306433736859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8422918634240966942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed0874d9a11bdd4fb0886ed96563e05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_dropPrefab: {fileID: 0}
+  m_dropParent: {fileID: 0}
+  m_maxlife: 0
 --- !u!114 &8422918634240966916
 MonoBehaviour:
   m_ObjectHideFlags: 0

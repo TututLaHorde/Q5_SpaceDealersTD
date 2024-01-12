@@ -1114,6 +1114,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6664440806119375900, guid: d4964210b9505fd44a3db23fd2599d90, type: 3}
   m_PrefabInstance: {fileID: 1216954851}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1247785207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247785209}
+  - component: {fileID: 1247785208}
+  m_Layer: 0
+  m_Name: DropManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1247785208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247785207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ee4e69555a3ed46bbd6d2dd2cd05a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_dropPrefab: {fileID: 8366073942135337130, guid: 1c1af211d65efc64c82bafa16550367b, type: 3}
+  m_startingNumb: 10
+  m_drops: []
+--- !u!4 &1247785209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247785207}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1256630514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 31668018499644650, guid: 9cfadcf84c380ce4993ea1400578fadd, type: 3}
