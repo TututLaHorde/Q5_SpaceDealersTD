@@ -14,6 +14,7 @@ public class ScTurret : MonoBehaviour
     [SerializeField] private LayerMask enemies;
 
     private Transform target;
+    private GameObject targetGo;
     private EnemyManager enemyManager = EnemyManager.instance;
     private Collider2D[] enemiesInRange;
     private Vector3 directionToTarget;
@@ -50,15 +51,17 @@ public class ScTurret : MonoBehaviour
             if (enemiesInRange.Length > 0)
             {
                 target = enemiesInRange[0].transform;
+                targetGo = target.gameObject;
                 return true;
             }
             return false;
         }
         else
         {
-            if (Vector3.Distance(target.position, myTrans.position) > range)
+            if (Vector3.Distance(target.position, myTrans.position) > range || !targetGo.activeInHierarchy)
             {
                 target = null;
+                targetGo = null;
                 return false;
             }
             return true;
