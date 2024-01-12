@@ -6,6 +6,7 @@ public class ObstaclesManager : MonoBehaviour
     public static ObstaclesManager instance;
 
     [HideInInspector] public List<ObstacleController> m_obstacles = new List<ObstacleController>();
+    [HideInInspector] public List<ObstacleController> m_structures = new List<ObstacleController>();
 
     /*-------------------------------------------------------------------*/
 
