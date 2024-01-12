@@ -9,16 +9,18 @@ public class ScTurret : MonoBehaviour
     [SerializeField] protected int dammagePerHit;
     [SerializeField] int health;
     [SerializeField] float shotPerSeconde; // number of shoots per seconde
-    [SerializeField] protected Transform myTrans;
     [SerializeField] protected List<Transform> firePoint = new List<Transform>();
     [SerializeField] private LayerMask enemies;
 
     private Transform target;
     private GameObject targetGo;
     private EnemyManager enemyManager = EnemyManager.instance;
+    protected ScBullet lastBullet;
     private Collider2D[] enemiesInRange;
     private Vector3 directionToTarget;
     protected Vector2 fireDirection;
+
+    protected Transform myTrans;
 
     private float lastShotTimeMark;
     private float fireRate;
@@ -29,6 +31,7 @@ public class ScTurret : MonoBehaviour
         fireRate = 1f / shotPerSeconde;
         ScArsenal.instance.GetNewTurret(this);
         lastShotTimeMark = Time.realtimeSinceStartup - fireRate;
+        myTrans = transform;
         FindTarget();
     }
 
