@@ -132,10 +132,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 8
   bulletSpeed: 100
-  dammagePerHit: 0
+  dammagePerHit: 100
   health: 0
   shotPerSeconde: 5
-  myTrans: {fileID: 6079425020831042271}
   firePoint:
   - {fileID: 4092169737661162339}
   enemies:

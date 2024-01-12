@@ -343,7 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 10
   bulletSpeed: 30
-  dammagePerHit: 5
+  dammagePerHit: 100
   health: 0
   shotPerSeconde: 50
   firePoint:

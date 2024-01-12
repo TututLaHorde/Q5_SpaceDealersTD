@@ -16,6 +16,11 @@ public class ScResourcesManager : MonoBehaviour
     [SerializeField] private TMP_Text m_methyltext;
     [SerializeField] private TMP_Text m_moneytext;
 
+    [Header("conversion")]
+    [SerializeField] private Transform playerPos;
+    [SerializeField] private float minDistanceToConvert;
+    [SerializeField] Transform heisenbergTrans;
+
     /*-------------------------------------------------------------------*/
 
     private void Awake()
@@ -40,6 +45,12 @@ public class ScResourcesManager : MonoBehaviour
     {
         UpdtTextMethyl();
         UpdtTextMoney();
+    }
+
+    private void Update()
+    {
+        if (Vector3.Distance(playerPos.position, heisenbergTrans.position) < minDistanceToConvert)
+            ConvertMethylToCash();
     }
 
     /*-------------------------------------------------------------------*/
@@ -104,5 +115,14 @@ public class ScResourcesManager : MonoBehaviour
     private void UpdtTextMethyl()
     {
         m_methyltext.text = m_methyl.ToString();
+    }
+
+    /*-------------------------------------------------------------------*/
+
+    private void ConvertMethylToCash()
+    {
+        GainMoney(m_methyl / 1000);
+        m_methyl = 0;
+        UpdtTextMethyl();
     }
 }

@@ -13,22 +13,29 @@ public class ScDragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
     private Sprite mySprite;
     private Transform originalParent;
     private UnityEngine.UI.Image myImage;
+    private ScResourcesManager bank;
 
     private void Start()
     {
         myImage = GetComponent<UnityEngine.UI.Image>();
         mySprite = myImage.sprite;
         originalParent = transform.parent;
-        price.text = myInfo.price.ToString() + "$";
+        price.text = myInfo.price.ToString() + "M$";
+        bank = ScResourcesManager.instance;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        ScBuildPreview.Instance.DragStart(myInfo);
-
-        transform.SetParent(transform.root);
-        transform.SetAsLastSibling();
-        myImage.raycastTarget = false;
+        if (bank.GetMoney() >= myInfo.price)
+        {
+            ScBuildPreview.Instance.DragStart(myInfo);
+            transform.SetParent(transform.root);
+            transform.SetAsLastSibling();
+            myImage.raycastTarget = false;
+        }
+        else
+            eventData.pointerDrag = null;
+       
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -51,6 +58,7 @@ public class ScDragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDr
         transform.position = originalParent.position;
         myImage.raycastTarget = true;
         myImage.enabled = true;
+        bank.TryLoseMoney(myInfo.price);
     }
     
 }
