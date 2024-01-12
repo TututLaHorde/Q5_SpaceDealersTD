@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 6765966207201523218}
   - component: {fileID: 1100799348943492880}
   - component: {fileID: 5335513327604214672}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heisenberg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
