@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
@@ -19,7 +20,7 @@ public class EnemyMove : MonoBehaviour
     private Rigidbody2D m_rb;
     private Transform m_trs;
 
-    private bool m_isTargeting;
+     public Transform m_target;
 
     /*-------------------------------------------------------------------*/
 
@@ -32,22 +33,9 @@ public class EnemyMove : MonoBehaviour
     public void Move()
     {
         //move on boids
-        if (!m_isTargeting)
-        {
-            m_rb.velocity += BoidBehavior();
-            m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
-            LookForward();
-        }
-        //target and atk
-        else
-        {
-            m_rb.velocity = Vector2.zero;
-
-            //TODO Look to target
-            //TODO atk target
-            //TODO stop targeting if too far
-        }
-
+        m_rb.velocity += BoidBehavior();
+        m_rb.velocity = Vector2.ClampMagnitude(m_rb.velocity, m_speed);
+        LookForward();
     }
 
     /*-------------------------------------------------------------------*/
@@ -84,21 +72,8 @@ public class EnemyMove : MonoBehaviour
 
         //check obstacles
         int aliens = nbCloseObj;
-        foreach (ObstacleController obstacle in ObstaclesManager.instance.m_obstacles)
-        {
-            //find a traget to atk
-            if (obstacle.tag == "Structures")
-            {
-                m_isTargeting = true;
-                //TODO smooth slowdown
-                return Vector2.zero;
-            }
-
-            Vector2 closestPoint = obstacle.m_coll.ClosestPoint(m_trs.position);
-            float dist = Vector2.Distance((Vector2)m_trs.position, closestPoint);
-
-            avoidVelocity += OneAvoid(dist, closestPoint, ref nbCloseObj, aliens);
-        }
+        avoidVelocity += CheckObstacles(ref nbCloseObj, ObstaclesManager.instance.m_obstacles, aliens);
+        avoidVelocity += CheckObstacles(ref nbCloseObj, ObstaclesManager.instance.m_structures, aliens, true);
 
         //calculate the velocity
         finalVelocity += Avoiding(nbCloseObj, avoidVelocity);
@@ -106,6 +81,38 @@ public class EnemyMove : MonoBehaviour
         finalVelocity += Cohesion(nbCohesObj, cohesionPoint);
 
         return finalVelocity;
+    }
+
+    private Vector2 CheckObstacles(ref int nbCloseObj, List<ObstacleController> obstacles, int nbAliens, bool isStruct = false)
+    {
+        Vector2 avoidVelocity = Vector2.zero;
+        float shortestDist = float.MaxValue;
+        ObstacleController targetObstacle = null;
+
+        foreach (ObstacleController obstacle in obstacles)
+        {
+            Vector2 closestPoint = obstacle.m_coll.ClosestPoint(m_trs.position);
+            float dist = Vector2.Distance((Vector2)m_trs.position, closestPoint);
+
+            if (isStruct && dist < shortestDist)
+            {
+                shortestDist = dist;
+                targetObstacle = obstacle;
+            }
+
+            avoidVelocity += OneAvoid(dist, closestPoint, ref nbCloseObj, nbAliens);
+        }
+
+        if (targetObstacle != null)
+        {
+            m_target = targetObstacle.transform;
+        }
+        else
+        {
+            m_target = null;
+        }
+
+        return avoidVelocity;
     }
 
     private Vector2 OneAvoid(float dist, Vector2 closestPoint, ref int nbCloseObj, int nbEnemies = 1)
