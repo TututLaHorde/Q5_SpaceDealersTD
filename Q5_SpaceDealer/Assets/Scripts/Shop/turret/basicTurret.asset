@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510c814b840720b42a2f4e3967d23a1a, type: 3}
   m_Name: basicTurret
   m_EditorClassIdentifier: 
-  range: 50
+  range: 10
   sprite: {fileID: 21300000, guid: 6dd8607a2de3e964ba7c7d0fb115bf5f, type: 3}
   go: {fileID: 6079425020831042270, guid: 43c77ed0502eef34f9ff9a3fe85222ff, type: 3}
   price: 70

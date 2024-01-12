@@ -21,6 +21,7 @@ public class ScBuildPreview : MonoBehaviour
     private turretInfo newTurretInfos;
     private LineRenderer myLine;
     private float stepAngle;
+    private float turretRange;
 
     private Vector3 mousePosOnScreen;
     private Vector3 mousePosInWorld;
@@ -54,6 +55,7 @@ public class ScBuildPreview : MonoBehaviour
         dragablesprite.sprite = newTurretInfos.sprite;
         dragBegins.Invoke();
         myLine.positionCount = rangeSubdivisionCount + 1;
+        turretRange = newTurretInfos.go.GetComponent<ScTurret>().GetRange();
     }
     public void Draging()
     {
@@ -81,8 +83,8 @@ public class ScBuildPreview : MonoBehaviour
         {
             if (result.transform.gameObject.layer == 7)
             {
-                Debug.Log(result.transform.name);
-                GameObject.Instantiate(newTurretInfos.go, mainCamera.ScreenToWorldPoint(mousePosOnScreen) + new Vector3(0, 0, 2), Quaternion.identity);
+                Vector3 spawnPoint = new Vector3(mainCamera.ScreenToWorldPoint(mousePosOnScreen).x, mainCamera.ScreenToWorldPoint(mousePosOnScreen).y, 0);
+                GameObject.Instantiate(newTurretInfos.go, spawnPoint, Quaternion.identity);
             }
         }
 
@@ -95,8 +97,8 @@ public class ScBuildPreview : MonoBehaviour
     {
         for (int i=0; i<rangeSubdivisionCount+1;i++)
         {
-            float x = newTurretInfos.range * Mathf.Cos(stepAngle * i);
-            float y = newTurretInfos.range * Mathf.Sin(stepAngle * i);
+            float x = turretRange * Mathf.Cos(stepAngle * i);
+            float y = turretRange * Mathf.Sin(stepAngle * i);
 
             myLine.SetPosition(i, new Vector3(mousePosInWorld.x + x, mousePosInWorld.y + y,0) );
         }

@@ -5,16 +5,104 @@ using UnityEngine;
 public class ScTurret : MonoBehaviour
 {
     [SerializeField] float range;
+    [SerializeField] protected float bulletSpeed;
     [SerializeField] int dammagePerHit;
     [SerializeField] int health;
-    [SerializeField] float fireRate;
-    [SerializeField] Transform myTrans;
-    [SerializeField] Transform firePoint;
+    [SerializeField] float shotPerSeconde; // number of shoots per seconde
+    [SerializeField] protected Transform myTrans;
+    [SerializeField] protected List<Transform> firePoint = new List<Transform>();
+    [SerializeField] private LayerMask enemies;
 
     private Transform target;
+    private EnemyManager enemyManager = EnemyManager.instance;
+    private Collider2D[] enemiesInRange;
+    private Vector3 directionToTarget;
+    protected Vector2 fireDirection;
 
-    protected void FindTarget()
+    private float lastShotTimeMark;
+    private float fireRate;
+
+
+    private void Start()
     {
+        fireRate = 1f / shotPerSeconde;
+        ScArsenal.instance.GetNewTurret(this);
+        lastShotTimeMark = Time.realtimeSinceStartup - fireRate;
+        FindTarget();
+    }
 
+    private bool Canshoot()
+    {
+        if (Time.realtimeSinceStartup >= lastShotTimeMark + fireRate)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    protected bool FindTarget()
+    {
+        if (target == null)
+        {
+            enemiesInRange = Physics2D.OverlapCircleAll(myTrans.position, range, enemies);
+            if (enemiesInRange.Length > 0)
+            {
+                target = enemiesInRange[0].transform;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            if (Vector3.Distance(target.position, myTrans.position) > range)
+            {
+                target = null;
+                return false;
+            }
+            return true;
+        }
+    }
+    protected void Aim()
+    {
+        directionToTarget = target.position - myTrans.position;
+        float zAngle = Vector2.Angle(Vector2.right, directionToTarget);
+
+        if (directionToTarget.y < 0)
+        {
+            zAngle = 360 - zAngle;
+        }
+
+        transform.rotation = Quaternion.Euler(0, 0, zAngle);
+    }
+    protected virtual void Shoot()
+    {
+        
+    }
+
+    
+    public void Behave()
+    {
+        if (target != null)
+        {
+            Aim();
+        }
+            
+
+        if (Canshoot())
+        {
+            if (FindTarget())
+            {
+                Shoot();
+                lastShotTimeMark = Time.realtimeSinceStartup;
+            }
+        }
+    }
+
+
+    public float GetRange()
+    {
+        return range;
     }
 }
