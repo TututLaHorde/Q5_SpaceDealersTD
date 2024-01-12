@@ -12,15 +12,12 @@ public class DropMovement : MonoBehaviour
 
     /*-------------------------------------------------------------------*/
 
-    private void Start()
-    {
-        m_trs = transform;
-    }
 
     private void OnEnable()
     {
         direction.x = Random.Range(-1f, 1f);
         direction.y = Random.Range(-1f, 1f);
+        m_trs = transform;
     }
 
     /*-------------------------------------------------------------------*/

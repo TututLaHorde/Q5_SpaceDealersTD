@@ -8,6 +8,7 @@ public class ScBullet : MonoBehaviour
     private Rigidbody2D rb;
     private GameObject go;
     private Transform myTrans;
+    private int dammage;
 
     private void Awake()
     {
@@ -16,10 +17,11 @@ public class ScBullet : MonoBehaviour
         go = gameObject;
     }
 
-    public void Fire(Vector2 direction, float force, Vector3 originalPos)
+    public void Fire(Vector2 direction, float force, Vector3 originalPos, int newDammage)
     {
         myTrans.position = originalPos;
         rb.AddForce(direction * force, ForceMode2D.Impulse);
+        dammage = newDammage;
     }
 
     public void Retire()
@@ -31,6 +33,10 @@ public class ScBullet : MonoBehaviour
     {
         if (collision.collider != null)
         {
+            if (collision.collider.gameObject.layer == 3)
+            {
+                collision.collider.GetComponent<EnemyLife>().TakeDamage(dammage);
+            }
             Retire();
         }
     }
