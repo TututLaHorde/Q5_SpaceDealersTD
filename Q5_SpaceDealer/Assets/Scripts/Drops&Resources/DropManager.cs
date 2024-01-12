@@ -35,9 +35,12 @@ public class DropManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach (var drop in m_drops)
+        for (int i = 0; i < m_drops.Count; i++)
         {
-            drop.Move();
+            if (m_drops[i].gameObject.activeSelf)
+            {
+                m_drops[i].Move();
+            }
         }
     }
 
@@ -54,11 +57,15 @@ public class DropManager : MonoBehaviour
         m_unactiveDrops.RemoveAt(0);
         m_drops.Add(drop);
 
+        drop.gameObject.SetActive(true);
+
         return drop;
     }
 
     public void RemoveDrop(DropMovement dropMove)
     {
+        dropMove.gameObject.SetActive(false);
+
         m_drops.Remove(dropMove);
         m_unactiveDrops.Add(dropMove);
     }

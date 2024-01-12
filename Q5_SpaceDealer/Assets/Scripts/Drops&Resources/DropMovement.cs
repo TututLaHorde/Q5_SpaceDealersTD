@@ -2,12 +2,19 @@ using UnityEngine;
 
 public class DropMovement : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField][Range(0f, 10f)] private float m_maxSpeed;
     [SerializeField][Range(0f, 10f)] private float m_minSpeed;
     [SerializeField] private float m_destructionDist;
     private Vector3 direction = Vector3.zero;
 
-    private Transform m_targetTrs;
+    [Header("Methyl Amount")]
+    [SerializeField][Min(0f)] private float m_recupDist;
+    [SerializeField][Min(0)] private int m_maxMethyl;
+    [SerializeField][Min(0)] private int m_minMethyl;
+    private int m_methylAmount;
+
+    [HideInInspector] public Transform m_targetTrs;
     private Transform m_trs;
 
     /*-------------------------------------------------------------------*/
@@ -15,9 +22,11 @@ public class DropMovement : MonoBehaviour
 
     private void OnEnable()
     {
+        m_methylAmount = Random.Range(m_minMethyl, m_maxMethyl + 1);
         direction.x = Random.Range(-1f, 1f);
         direction.y = Random.Range(-1f, 1f);
         m_trs = transform;
+        m_targetTrs = null;
     }
 
     /*-------------------------------------------------------------------*/
@@ -25,10 +34,9 @@ public class DropMovement : MonoBehaviour
     public void Move()
     {
         //follow player
-        if (m_targetTrs != null)
+        if (IsInCollect())
         {
-            direction = m_trs.position - m_targetTrs.position;
-            m_trs.position += m_maxSpeed * direction * Time.deltaTime;
+            FollowTarget();
         }
         //space move
         else
@@ -40,12 +48,30 @@ public class DropMovement : MonoBehaviour
         DestroyArea();
     }
 
+    public bool IsInCollect()
+    {
+        return m_targetTrs != null;
+    }
+
     /*-------------------------------------------------------------------*/
 
     private void DestroyArea()
     {
         if (m_trs.position.magnitude >= m_destructionDist) 
         {
+            DropManager.instance.RemoveDrop(this);
+        }
+    }
+
+    private void FollowTarget()
+    {
+        direction = m_targetTrs.position - m_trs.position;
+        m_trs.position += m_maxSpeed * (direction.normalized + direction) * Time.deltaTime;
+
+        //recup
+        if (Vector3.Distance(m_trs.position, m_targetTrs.position) <= m_recupDist)
+        {
+            ScResourcesManager.instance.GainMethyl(m_methylAmount);
             DropManager.instance.RemoveDrop(this);
         }
     }
