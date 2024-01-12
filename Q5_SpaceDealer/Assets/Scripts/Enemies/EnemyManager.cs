@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -21,8 +22,8 @@ public class EnemyManager : MonoBehaviour
     private int m_waveIndex = 0;
     private Vector2 m_waveOrigin = Vector2.up;
 
-    [HideInInspector] public List<EnemyController> m_enemies = new List<EnemyController>();
-    private List<EnemyController> m_unactiveEnemies = new List<EnemyController>();
+    public List<EnemyController> m_enemies = new List<EnemyController>();
+    private HashSet<EnemyController> m_unactiveEnemies = new HashSet<EnemyController>();
 
     /*-------------------------------------------------------------------*/
 
@@ -80,13 +81,13 @@ public class EnemyManager : MonoBehaviour
 
     private void SpawnAnEnemy()
     {
-        if (m_unactiveEnemies.Count > 0)
+        if (m_unactiveEnemies.Count > 0 && m_enemies.Count + m_unactiveEnemies.Count <= m_nbMaxEnemies)
         {
             //active enemy
-            EnemyController enemy = m_unactiveEnemies[0];
-            m_unactiveEnemies.RemoveAt(0);
-            enemy.gameObject.SetActive(true);
+            EnemyController enemy = m_unactiveEnemies.FirstOrDefault();
+            m_unactiveEnemies.Remove(enemy);
             m_enemies.Add(enemy);
+            enemy.gameObject.SetActive(true);
 
             //place enemy
             Vector3 pos = Vector3.zero;
